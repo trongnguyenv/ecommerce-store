@@ -5,6 +5,7 @@ import { router } from "../router/Routes";
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -14,7 +15,7 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    const { data, status } = error.response as AxiosResponse;
+    const { data, status } = error.response as any;
 
     switch (status) {
       case 400:
@@ -55,6 +56,14 @@ const Catalog = {
   details: (id: number) => requests.get(`products/${id}`),
 };
 
+const Basket = {
+  get: () => requests.get("basket"),
+  addItem: (productId: number, quantity = 1) =>
+    requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
+  removeItem: (productId: number, quantity = 1) =>
+    requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
+};
+
 const TestError = {
   get400Error: () => requests.get("buggy/bad-request"),
   get401Error: () => requests.get("buggy/unauthorized"),
@@ -66,6 +75,7 @@ const TestError = {
 const agent = {
   Catalog,
   TestError,
+  Basket,
 };
 
 export default agent;
