@@ -8,27 +8,22 @@ import {
   TableRow,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import NotFound from "../../errors/NotFound";
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { LoadingButton } from "@mui/lab";
-import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import {
-  addBasketItemAsync,
-  removeBasketItemAsync,
-} from "../basket/basketSlice";
-import { fetchProductAsync, productSelector } from "./catalogSlice";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import NotFound from '../../errors/NotFound';
+import LoadingComponent from '../../app/layout/LoadingComponent';
+import { LoadingButton } from '@mui/lab';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import { addBasketItemAsync, removeBasketItemAsync } from '../basket/basketSlice';
+import { fetchProductAsync, productSelector } from './catalogSlice';
 
 export default function ProductDetails() {
   const { basket, status } = useAppSelector((state) => state.basket);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const product = useAppSelector((state) =>
-    productSelector.selectById(state, parseInt(id!))
-  );
+  const product = useAppSelector((state) => productSelector.selectById(state, parseInt(id!)));
   const { status: productStatus } = useAppSelector((state) => state.catalog);
 
   const [quantity, setQuantity] = useState(0);
@@ -52,7 +47,7 @@ export default function ProductDetails() {
         addBasketItemAsync({
           productId: product?.id!,
           quantity: updatedQuantity,
-        })
+        }),
       );
     } else {
       const updatedQuantity = item.quantity - quantity;
@@ -60,24 +55,19 @@ export default function ProductDetails() {
         removeBasketItemAsync({
           productId: product?.id!,
           quantity: updatedQuantity,
-        })
+        }),
       );
     }
   }
 
-  if (productStatus.includes("pending"))
-    return <LoadingComponent message="Loading product..." />;
+  if (productStatus.includes('pending')) return <LoadingComponent message="Loading product..." />;
 
   if (!product) return <NotFound />;
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={6}>
-        <img
-          src={product.pictureUrl}
-          alt={product.name}
-          style={{ width: "100%" }}
-        />
+        <img src={product.pictureUrl} alt={product.name} style={{ width: '100%' }} />
       </Grid>
       <Grid item xs={6}>
         <Typography variant="h3">{product.name}</Typography>
@@ -124,18 +114,16 @@ export default function ProductDetails() {
           </Grid>
           <Grid item xs={6}>
             <LoadingButton
-              disabled={
-                item?.quantity === quantity || (!item && quantity === 0)
-              }
-              loading={status.includes("pending")}
+              disabled={item?.quantity === quantity || (!item && quantity === 0)}
+              loading={status.includes('pending')}
               onClick={handleUpdateCart}
-              sx={{ height: "55px" }}
+              sx={{ height: '55px' }}
               color="primary"
               size="large"
               variant="contained"
               fullWidth
             >
-              {item ? "Update Quantity" : "Add to Cart"}
+              {item ? 'Update Quantity' : 'Add to Cart'}
             </LoadingButton>
           </Grid>
         </Grid>

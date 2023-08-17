@@ -1,8 +1,8 @@
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import ProductList from "./ProductList";
-import { useEffect } from "react";
-import { fetchProductsAsync, productSelector } from "./catalogSlice";
+import LoadingComponent from '../../app/layout/LoadingComponent';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import ProductList from './ProductList';
+import { useEffect } from 'react';
+import { fetchProductsAsync, productSelector } from './catalogSlice';
 
 export default function Catalog() {
   const products = useAppSelector(productSelector.selectAll);
@@ -13,8 +13,7 @@ export default function Catalog() {
     if (!productsLoaded) dispatch(fetchProductsAsync());
   }, [dispatch, productsLoaded]);
 
-  if (status.includes("pending"))
-    return <LoadingComponent message="Loading products..." />;
+  if (status.includes('pending')) return <LoadingComponent message="Loading products..." />;
 
   return (
     <>
