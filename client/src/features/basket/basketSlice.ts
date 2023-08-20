@@ -47,8 +47,8 @@ export const basketSlice = createSlice({
       state.status = 'pendingAddItem' + action.meta.arg.productId;
     });
     builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
-      state.basket = action.payload;
       state.status = 'idle';
+      state.basket = action.payload;
     });
     builder.addCase(addBasketItemAsync.rejected, (state, action) => {
       state.status = 'idle';
